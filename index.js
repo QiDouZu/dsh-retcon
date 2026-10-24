@@ -19,6 +19,27 @@
  * 你记什么、信什么、怎么判，全是你的 —— 那是它不打算给你的部分。
  */
 
+/**
+ * 演示时抓出来的：只拦「空」不够。
+ * `can_refute: "多想想就知道了"` 不是空，但它等于没写。
+ * 所以加一层最简判定：明显不可执行的句式 = 拒。
+ *
+ * ⚠ 这层只认那几句固定说法，**不做语义判断** ——
+ *   替人判「什么算真可执行」就越界了，那越界之后它会开始替你想。
+ */
+const FAKE_REFUTE = ['多想想', '再观察', '实践检验', '看情况', '时间会证明', '以后再说', '继续关注']
+
+function looksLikeNonRefute(s) {
+  const t = String(s || '').trim()
+  if (t.length < 8) return true            // 太短，不可能是步骤
+  const hit = FAKE_REFUTE.some((w) => t.includes(w))
+  if (!hit) return false
+  // 命中了废话词：只有当整句就是那句废话（去掉标点后 ≤12 字）才拒
+  // 留这个口子是为了「多想想之后取 12 帧」这种——前面有废话，后面有真动作
+  return t.replace(/[，。、；：\s]/g, '').length <= 12
+}
+
+
 import { mkdirSync, readdirSync, readFileSync, writeFileSync, appendFileSync, existsSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 
@@ -257,6 +278,15 @@ export function apply(ctx) {
               '⇒ 信念不是不能有 —— 但它不能混在「判断」里过夜。',
           }
         }
+        if (looksLikeNonRefute(refute)) {
+          return {
+            text:
+              '拒绝封存：`can_refute` 不是一条能执行的验证。\n\n' +
+              `「${refute}」这一句，别人照着做不了任何事。\n\n` +
+              '⇒ 能执行的验证长这样：跑什么、取几帧、读哪段、问谁。\n' +
+              '⇒ 不是「多想想」—— 那是把判断又推回给未来。',
+          }
+        }
         const claim = String(args.claim || '').trim()
         if (!claim) return { text: '拒绝封存：没有假设内容。' }
         const evidence = (args.evidence || []).map(String).filter(Boolean)
@@ -265,7 +295,14 @@ export function apply(ctx) {
         }
 
         ensureDir(dirOf())
-        const file = `${dayStamp()}_${slugify(args.title)}.md`
+        // 同一天同标题不覆盖：加 -2 -3 后缀（演示时抓出来的：第二条把第一条盖了）
+        const base = `${dayStamp()}_${slugify(args.title)}`
+        let file = `${base}.md`
+        let n = 2
+        while (existsSync(join(dirOf(), file))) {
+          file = `${base}-${n}.md`
+          n++
+        }
         const path = join(dirOf(), file)
         const body = buildSeal({
           title: args.title,
