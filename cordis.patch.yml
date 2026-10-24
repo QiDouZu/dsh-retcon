@@ -1,0 +1,5 @@
+# 挂载点：id 是 DSH 内部的节点名，随便叫，不影响功能
+# name 必须跟 package.json 的 "name" 一致（dsh-retro）
+- insert:
+    - id: retro
+      name: 'dsh-retro'

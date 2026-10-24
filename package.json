@@ -1,0 +1,33 @@
+{
+  "name": "dsh-retro",
+  "version": "0.1.0",
+  "description": "DSH 插件：写记忆时检查「什么情况下它是错的」，没写就拒绝写入。不存记忆、不做检索，只在写入时拦一下。",
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js",
+  "keywords": [
+    "deepseek-harness",
+    "dsh-plugin",
+    "memory",
+    "falsifiable",
+    "judgement"
+  ],
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-tools": "*"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-tools": {
+      "optional": true
+    }
+  }
+}

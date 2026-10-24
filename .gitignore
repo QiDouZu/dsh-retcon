@@ -1,0 +1,8 @@
+# 用户自己的数据，不进版本库
+封存/
+原片/
+*.log
+__pycache__/
+*.pyc
+node_modules/
+.DS_Store
