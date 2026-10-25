@@ -40,7 +40,7 @@ function looksLikeNonRefute(s) {
 }
 
 
-import { mkdirSync, readdirSync, readFileSync, writeFileSync, appendFileSync, existsSync } from 'node:fs'
+import { mkdirSync, readdirSync, readFileSync, writeFileSync, appendFileSync, existsSync, renameSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 
 export const name = 'retro'
@@ -129,7 +129,7 @@ function buildSeal({ title, claim, evidence, can_refute, guess_wrong, source, or
   if (guess_wrong && guess_wrong.length) {
     guess_wrong.forEach((g, i) => lines.push(`${i + 1}. ${g.trim()}`))
   } else {
-    lines.push('（你说的，但没细列 —— 这里留空不是没有，是没写。）')
+    lines.push('（还没写。**这一栏空着，回访时就没有出错的入口**——补上它，比补别的都有用。）')
   }
   lines.push('')
   lines.push('### 怎么推翻我')
@@ -208,7 +208,10 @@ function appendLater(file, verdict, note) {
   }
   const noteOneLine = note.trim().replace(/\s*\n\s*/g, ' / ').replace(/\|/g, '\\|')
   txt = txt.trimEnd() + `\n| ${now()} | ${verdict}（${mark}） | ${noteOneLine} |\n`
-  writeFileSync(path, txt, 'utf8')
+  // 原子写：先写临时文件再 rename。第一节不可再生，不能写一半就断。
+  const tmp = path + '.tmp'
+  writeFileSync(tmp, txt, 'utf8')
+  renameSync(tmp, path)
   return { ok: true, text: `已记：${path.split(/[\\/]/).pop()} → ${mark}` }
 }
 

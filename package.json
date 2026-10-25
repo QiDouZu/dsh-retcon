@@ -1,7 +1,7 @@
 {
   "name": "dsh-retcon",
-  "version": "0.1.5",
-  "description": "DSH 插件：写记忆时检查「什么情况下它是错的」，没写就拒绝写入。不存记忆、不做检索，只在写入时拦一下。",
+  "version": "0.2.0",
+  "description": "写判断时检查「什么情况下它是错的」——没写就不许过。一份封存格式 + 一把尺子；DSH 插件是可选的自动手，不装也能照格式手写。",
   "license": "MIT",
   "type": "module",
   "main": "index.js",
@@ -13,12 +13,15 @@
     "long-term-memory",
     "falsifiable",
     "judgement",
-    "audit-trail"
+    "audit-trail",
+    "markdown-format",
+    "retrospective"
   ],
   "files": [
     "index.js",
     "cordis.patch.yml",
     "README.md",
+    "格式.md",
     "CHANGELOG.md",
     "LICENSE",
     "读取/",
