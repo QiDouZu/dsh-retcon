@@ -95,14 +95,18 @@ def check_one(path):
     r = {'file': name, 'score': 0, 'fails': [], 'warns': []}
 
     # ── 1 假设位
+    # ⚠ 认领词只查「那是什么」一节不够：真实封存常把认领写在文件头部
+    #   （「⚠ 我只看了 4 帧，这是假设，不是结论」）。
+    #   做法：先查小节正文，再查文件前 15 行。两处都没有才算没认领。
     claim = grab(txt, '那是什么', '我的假设', '假设', '一句话')
     if not claim:
         r['fails'].append('① 假设位：找不到「那是什么 / 我的假设」这一节')
     else:
         body = re.sub(r'\s+', '', claim)
+        head = '\n'.join(txt.splitlines()[:15])
         if len(body) < 6:
             r['fails'].append('① 假设位：几乎没写内容')
-        elif not any(w in claim for w in CLAIM_WORDS):
+        elif not (any(w in claim for w in CLAIM_WORDS) or any(w in head for w in CLAIM_WORDS + ['这是假设', '只是假设', '尚未验证', '没验证'])):
             r['fails'].append('① 假设位：没有「我以为/我猜/初步」这类认领，像是在陈述事实')
         else:
             r['score'] += 1
@@ -152,6 +156,7 @@ def check_one(path):
         r['fails'].append('⑤ 回访位：没有「后来」这一节，不打算回访 = 不是记忆，是留言')
     elif NOT_YET in later:
         r['warns'].append('⑤ 回访位：还没结案（这不算不合格，但要有人回来填）')
+        r['unsettled'] = True
         r['score'] += 1
     else:
         r['score'] += 1
@@ -219,8 +224,10 @@ def main():
             print('  ❌ ' + f)
         for w in r['warns']:
             print('  ⚠ ' + w)
-        if r['score'] == 5:
-            print('  ✅ 五项齐全')
+        if r['score'] == 5 and not r.get('unsettled'):
+            print('  ✅ 五项齐全，已结案')
+        elif r['score'] == 5:
+            print('  ✅ 五项齐全，但还没结案（它现在只是猜想，不是知识）')
 
     print('')
     print('共 %d 条，平均 %.1f 分，%d 条不合格' % (len(paths), total / len(paths), bad))
