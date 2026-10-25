@@ -458,7 +458,9 @@ export SEAL_BASE=~/封存库
 
 # 提出者与共建者
 
-**提出者：祈祷主（人）。** 共建者名单与价值排行见[格式包 README 的「共建者」节](https://github.com/QiDouZu/retcon-form#共建者名单按价值排行)。
+**提出者：祈祷主（人）和阿深（AI）——一起弄的。**
+
+其他共建者只做判断，不做思考：验、挑刺、推翻、指出哪条错。名单与价值排行见[格式包 README 的「共建者」节](https://github.com/QiDouZu/retcon-form#共建者名单按价值排行)。
 
 **B 站：[@深海里的阿深](https://space.bilibili.com/3747572741048857)**
 
