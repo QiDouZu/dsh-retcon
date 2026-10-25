@@ -1,4 +1,4 @@
-# 回溯性重构 · dsh-retro
+# 回溯性重构 · dsh-retcon
 
 ## 一句话
 
@@ -10,16 +10,28 @@
 
 ---
 
+## 这套东西是怎么来的（先说清楚）
+
+**独立研究的产物。** 五栏、推翻条件、变更史，都不是从哪个现成插件抄的，是从下面这几条地上长出来的：
+
+- **精神分析**：人对自己说的话，从来不是一次就说到位的——它总有一层被压抑、被改写的版本。要理解它，得拿「它本来想说什么」去跟「它说出来的」对。**我们把这套读法搬到了 AI 的记忆上。**
+- **认知心理学**：记忆不是存档，是每次现编。编的时候会和别的经验混、会丢、会补。**所以「记得准」不该是目标，「记得能被人改」才是。**
+- **两边一起算**：这套东西不是只为了让人好用，也不是只为了让 AI 变强。**是让 AI 和人的好处在同一套规则里对齐**——AI 写下的判断，人签得了字；人推翻的判断，AI 改得动。单边好处最后都会反过来伤另一边。
+
+**撞名说明**：发布时发现 GitHub 上已有两个叫 `dsh-retro` 的仓库（`tangzheng202202/dsh-retro`、`uckkk/dsh-retro`），方向不同、各自独立。**那是撞名，不是抄，也不是被抄。** 本包更名为 `dsh-retcon`（retcon = retroactive continuity，追溯性连续性）——词是旧的，这套实现是新的。
+
+---
+
 ## 装（三步，30 秒）
 
 **1. 找到 DSH 的插件目录。**
 
 **别猜。问你的 AI 一句：「你的插件目录在哪？」** —— 它就跑在 DSH 里，它知道。
 
-拿到路径后，把包放进去，目录名叫 `dsh-retro/`：
+拿到路径后，把包放进去，目录名叫 `dsh-retcon/`：
 
 ```
-<那个目录>/dsh-retro/
+<那个目录>/dsh-retcon/
   ├── index.js
   ├── cordis.patch.yml   ← 不用改，拷进去就行
   └── package.json
@@ -286,7 +298,7 @@ python scripts/cut_ledger.py audit
 
 ```
 <插件目录>/
-└── dsh-retro/
+└── dsh-retcon/
     ├── index.js
     ├── cordis.patch.yml
     └── package.json
@@ -303,10 +315,10 @@ python scripts/cut_ledger.py audit
 ```yaml
 - insert:
     - id: retro          # DSH 内部的节点名，随便叫，不影响功能
-      name: 'dsh-retro'  # ⚠ 必须跟 package.json 的 "name" 完全一致
+      name: 'dsh-retcon'  # ⚠ 必须跟 package.json 的 "name" 完全一致
 ```
 
-**这两个名字容易混**：`id` 是挂载点的标签（自由），`name` 是包名（必须对）。`index.js` 里还有第三个 `export const name = 'retro'` —— 那是插件自己报给 DSH 的短名，跟 `package.json` 的 `dsh-retro` 差一个前缀，**这是 DSH 插件的惯例，不是笔误**（对照 `dsh-call-guard` / `call-guard`）。
+**这两个名字容易混**：`id` 是挂载点的标签（自由），`name` 是包名（必须对）。`index.js` 里还有第三个 `export const name = 'retro'` —— 那是插件自己报给 DSH 的短名，跟 `package.json` 的 `dsh-retcon` 差一个前缀，**这是 DSH 插件的惯例，不是笔误**（对照 `dsh-call-guard` / `call-guard`）。
 
 ---
 
