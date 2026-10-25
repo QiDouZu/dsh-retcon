@@ -1,6 +1,6 @@
 {
   "name": "dsh-retcon",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "写判断时检查「什么情况下它是错的」——没写就不许过。一份封存格式 + 一把尺子；DSH 插件是可选的自动手，不装也能照格式手写。",
   "license": "MIT",
   "type": "module",
