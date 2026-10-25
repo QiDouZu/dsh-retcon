@@ -161,6 +161,17 @@ function buildSeal({ title, claim, evidence, can_refute, guess_wrong, source, or
   lines.push('（每次推翻：以为什么 → 实际什么 → 源自哪一条 → 得出什么别的看法。')
   lines.push(' **✅ 成长性**：这一条之后，那套东西（标准/规则/工具）改了哪一条。没改就写「无」。）')
   lines.push('')
+  lines.push('---')
+  lines.push('')
+  lines.push('## 五、变更史（状态机，只加不改）')
+  lines.push('')
+  lines.push('> 这条判断被建立、被回访、被改的全过程。**不看这一栏，就不知道它现在凭什么算「站住了」。**')
+  lines.push('> 灵感：retcon 的 `history` 状态机（nikomatsakis/retcon）—— 进度不靠记忆，靠文件。')
+  lines.push('')
+  lines.push('| 时间 | 状态 | 依据 |')
+  lines.push('|---|---|---|')
+  lines.push(`| ${now()} | 建立（created） | 初始假设，尚未回访 |`)
+  lines.push('')
   return lines.join('\n')
 }
 
@@ -191,6 +202,12 @@ function appendLater(file, verdict, note) {
   } else {
     txt = txt + block
   }
+  // 变更史：每一次回访都往状态机里记一行（只加不改）
+  if (!txt.includes('## 五、变更史')) {
+    txt += '\n---\n\n## 五、变更史（状态机，只加不改）\n\n| 时间 | 状态 | 依据 |\n|---|---|---|\n'
+  }
+  const noteOneLine = note.trim().replace(/\s*\n\s*/g, ' / ').replace(/\|/g, '\\|')
+  txt = txt.trimEnd() + `\n| ${now()} | ${verdict}（${mark}） | ${noteOneLine} |\n`
   writeFileSync(path, txt, 'utf8')
   return { ok: true, text: `已记：${path.split(/[\\/]/).pop()} → ${mark}` }
 }
